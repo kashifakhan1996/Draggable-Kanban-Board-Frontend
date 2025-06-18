@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "tailwindcss";
+
+html,
+body,
+#root {
+  @apply bg-black text-white box-border
+}
+
+/* Define your custom color using a CSS variable */
+:root {
+  --main-bg-color: #0D1117;
+  --column-bg-color: #161C22;
+}
+
+/* Extend Tailwind utilities using @layer */
+@layer utilities {
+  .bg-mainBackgroundColor {
+    background-color: var(--main-bg-color);
+  }
+
+  .border-mainBackgroundColor {
+    border-color: var(--main-bg-color);
+  }
+
+  .text-mainBackgroundColor {
+    color: var(--main-bg-color);
+  }
+
+  .bg-columnBackgroundColor {
+    background-color: var(--column-bg-color);
+  }
+
+  .border-columnBackgroundColor {
+    border-color: var(--column-bg-color);
+  }
+
+  .text-columnBackgroundColor {
+    color: var(--column-bg-color);
+  }
+  .stroke-gray-500 {
+    stroke: #6B7280;
+  }
+  .stroke-white {
+    stroke: #ffff;
+  }
+} 
