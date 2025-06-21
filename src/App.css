@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind typography;
+
 @import "tailwindcss";
 
 html,
@@ -46,4 +48,14 @@ body,
   .stroke-white {
     stroke: #ffff;
   }
-} 
+}
+
+::-webkit-scrollbar{
+  width: 4px;
+}
+::-webkit-scrollbar:horizontal{
+  height: 8px;
+}
+::-webkit-scrollbar-thumb{
+  @apply bg-rose-500 rounded-2xl
+}
