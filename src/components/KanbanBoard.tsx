@@ -157,8 +157,12 @@ const KanbanBoard = () => {
                 column={activeColumn}
                 deleteColumn={() => deleteColumn(activeColumn.id)}
                 updateColumn={function (data: Column): void {
+                  console.log(data);
                   throw new Error("Function not implemented.");
                 }}
+                tasks={[]}
+                setTasks={setTasks}
+                allColumnTasks={[]}
               />
             )}
           </DragOverlay>,

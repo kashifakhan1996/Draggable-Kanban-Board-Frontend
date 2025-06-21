@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TrashIcon from "../icons/TrashIcon";
 import type { Id, Task } from "../types";
 
@@ -8,13 +9,15 @@ interface Props {
 
 const TaskCard = (props: Props) => {
   const { task, deleteTask } = props;
+  const [isMouseOver, setIsMouseOver] = useState(false);
   return (
     <div
       key={task.id}
       className="
         flex
-        gap-2               
         m-3
+        gap-2           
+        p-2.5
         bg-mainBackgroundColor
         rounded-md
         hover:ring-rose-500
@@ -22,7 +25,9 @@ const TaskCard = (props: Props) => {
         hover:ring-inset
         cursor-grab
         "
-      onClick={() => console.log()}
+      onClick={() => console.log("on edit")}
+      onMouseEnter={() => setIsMouseOver(true)}
+      onMouseLeave={() => setIsMouseOver(false)}
     >
       <div
         className="
@@ -32,15 +37,17 @@ const TaskCard = (props: Props) => {
                   "
         dangerouslySetInnerHTML={{ __html: task.content }}
       ></div>
-      <button onClick={() => deleteTask(task.id)}>
-        <TrashIcon
-          extClass={`
+      {isMouseOver && (
+        <button onClick={() => deleteTask(task.id)}>
+          <TrashIcon
+            extClass={`
                     rounded
                     stroke-gray-500
                     ahover:stroke-white
                     hover:bg-columnBackgroundColor`}
-        />
-      </button>
+          />
+        </button>
+      )}
     </div>
   );
 };
