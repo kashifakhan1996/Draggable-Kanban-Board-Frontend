@@ -13,6 +13,7 @@ interface Props {
   tasks: Task[];
   allColumnTasks: Task[];
   setTasks: (tasks: Task[]) => void;
+  deleteTask: (taskId: Id) => void;
   deleteColumn: () => void;
   updateColumn: (data: Column) => void;
 }
@@ -24,6 +25,7 @@ const ColumnContainer = (props: Props) => {
     setTasks,
     deleteColumn,
     updateColumn,
+    deleteTask,
   } = props;
   const [editMode, setEditMode] = useState(false);
   const [addTaskMode, setAddTaskMode] = useState(false);
@@ -47,13 +49,18 @@ const ColumnContainer = (props: Props) => {
     updateColumn(data);
   };
 
-  const deleteTask = (taskId: Id) =>
-    setTasks(tasks.filter((task) => task.id !== taskId));
-
   const addTask = () => {
-    console.log(tasks);
     const taskToAdd: Task = addNewTask(column.id, currentTask);
     setTasks([...allColumnTasks, taskToAdd]);
+  };
+  const updateTaskContent = (taskId: Id, content: string) => {
+    const updatedTask = allColumnTasks.map((task_item) => {
+      if (task_item.id === taskId) {
+        return { ...task_item, content: content };
+      }
+      return task_item;
+    });
+    setTasks(updatedTask);
   };
 
   const style = {
@@ -166,7 +173,15 @@ const ColumnContainer = (props: Props) => {
         <div className="flex flex-grow flex-col mt-2 overflow-auto">
           {tasks &&
             tasks.map((task) => (
-              <TaskCard deleteTask={deleteTask} task={task} />
+              <TaskCard
+                deleteTask={() => {
+                  deleteTask(task.id);
+                }}
+                task={task}
+                updateTaskContent={(taskId, content) =>
+                  updateTaskContent(taskId, content)
+                }
+              />
             ))}
           {addTaskMode && (
             <TaskTextarea

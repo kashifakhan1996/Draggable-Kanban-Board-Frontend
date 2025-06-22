@@ -28,39 +28,12 @@ const KanbanBoard = () => {
       },
     })
   );
-  /*const addNewColumn = () => {
-    const columnToAdd: Column = {
-      id: generateId(),
-      title: `Column ${columns.length + 1}`,
-    };
-    setColumn((prev) => [...prev, columnToAdd]);
-    console.log(columns);
-  };
-  const addNewTask = (columnId:Id) => {
-    const taskToAdd: Column = {
-      id: generateId(),
-      title: `Column ${columns.length + 1}`,
-    };
-    setColumn((prev) => [...prev, columnToAdd]);
-    console.log(columns);
-  };
-  const generateId = () => {
-    const randomId = Math.floor(Math.random() * 1000);
-    return randomId;
-  };
-  
-  const updateColumn = (data: Column) => {
-    const { id, title } = data;
-    const newColumn = columns.map((col) => {
-      if (col.id === id) {
-        return { ...col, title: title };
-      }
-      return col;
-    });
-    setColumn(newColumn);
-  };*/
+
   const deleteColumn = (id: Id) => {
     setColumn(columns.filter((col) => col.id !== id));
+  };
+  const deleteTask = (taskId: Id) => {
+    setTasks(tasks.filter((task) => task.id !== taskId));
   };
   const ondragstart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
@@ -122,6 +95,7 @@ const KanbanBoard = () => {
                   tasks={tasks.filter((task) => task.columnId === col.id)}
                   setTasks={setTasks}
                   allColumnTasks={tasks}
+                  deleteTask={(taskId) => deleteTask(taskId)}
                 />
               ))}
             </SortableContext>
@@ -157,12 +131,14 @@ const KanbanBoard = () => {
                 column={activeColumn}
                 deleteColumn={() => deleteColumn(activeColumn.id)}
                 updateColumn={function (data: Column): void {
-                  console.log(data);
                   throw new Error("Function not implemented.");
                 }}
-                tasks={[]}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id
+                )}
                 setTasks={setTasks}
                 allColumnTasks={[]}
+                deleteTask={deleteTask}
               />
             )}
           </DragOverlay>,
