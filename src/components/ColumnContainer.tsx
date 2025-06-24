@@ -1,8 +1,8 @@
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import type { Column, Id, Task } from "../types";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PlusIcon } from "../icons/PlusIcon";
 import { addNewTask } from "../utils/common";
 import TaskCard from "./TaskCard";
@@ -45,6 +45,7 @@ const ColumnContainer = (props: Props) => {
       column,
     },
   });
+  const taskIds = useMemo(() => tasks.map((col) => col.id), [tasks]);
   const updateTitle = (data: Column) => {
     updateColumn(data);
   };
@@ -171,18 +172,20 @@ const ColumnContainer = (props: Props) => {
         </div>
 
         <div className="flex flex-grow flex-col mt-2 overflow-auto">
-          {tasks &&
-            tasks.map((task) => (
-              <TaskCard
-                deleteTask={() => {
-                  deleteTask(task.id);
-                }}
-                task={task}
-                updateTaskContent={(taskId, content) =>
-                  updateTaskContent(taskId, content)
-                }
-              />
-            ))}
+          <SortableContext items={taskIds}>
+            {tasks &&
+              tasks.map((task) => (
+                <TaskCard
+                  deleteTask={() => {
+                    deleteTask(task.id);
+                  }}
+                  task={task}
+                  updateTaskContent={(taskId, content) =>
+                    updateTaskContent(taskId, content)
+                  }
+                />
+              ))}
+          </SortableContext>
           {addTaskMode && (
             <TaskTextarea
               currentTask={currentTask}

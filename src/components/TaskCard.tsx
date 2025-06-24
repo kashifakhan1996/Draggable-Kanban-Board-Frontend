@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TrashIcon from "../icons/TrashIcon";
 import type { Id, Task } from "../types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   task: Task;
@@ -19,9 +21,57 @@ const TaskCard = (props: Props) => {
     setIsMouseOver(false);
   };
 
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: {
+      type: "Task",
+      task,
+    },
+  });
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+  if (isDragging)
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        key={task.id}
+        className="
+        flex
+        items-center
+        text-left
+        m-2
+        gap-2           
+        p-2.5
+        bg-mainBackgroundColor
+        rounded-xl
+        hover:ring-rose-500
+        hover:ring-2
+        hover:ring-inset
+        cursor-grab
+        h-[100px]
+        min-h-[100px]
+        relative
+        "
+      ></div>
+    );
+
   if (editMode)
     return (
       <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
         key={task.id}
         className="
         flex
@@ -70,6 +120,10 @@ const TaskCard = (props: Props) => {
 
   return (
     <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       key={task.id}
       className="
         flex
@@ -99,7 +153,7 @@ const TaskCard = (props: Props) => {
                 h-[90%]
                 w-full
                 overflow-y-auto
-                overflow-x-auto
+                overflow-x-hidden
                 whitespace-pre-wrap
                 text-white
                   "
